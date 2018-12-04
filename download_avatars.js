@@ -19,8 +19,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
-var avatars = [];
-var login = [];
 
 var owner = process.argv.slice(2, 3)[0];
 var repo = process.argv.slice(3, 4)[0]
@@ -35,6 +33,7 @@ getRepoContributors(owner, repo, function(err, result) {
     downloadImageByURL(account.avatar_url, './avatars/' + account.login + '.jpg')
   })
 });
+
 // does not download unless avatars folder is already made @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -50,5 +49,4 @@ function downloadImageByURL(url, filepath) {
       console.log('end');
     })
     .pipe(fs.createWriteStream(filepath));
-
 };
