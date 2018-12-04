@@ -1,5 +1,7 @@
 var request = require('request');
 
+var fs = require('fs')
+
 var GITHUB_TOKEN = require('./secret.js')
 
 console.log("Welcome to the Github Avatar Downloader");
@@ -9,28 +11,44 @@ function getRepoContributors(repoOwner, repoName, cb) {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
       'User-Agent': 'request',
-      'GITHUB_TOKEN': GITHUB_TOKEN
+      'Authorization': GITHUB_TOKEN
     }
   };
-
   request(options, function(err, res, body) {
     cb(err, body);
   });
 }
 
-function downloadImageByURL(url, filepath) {
-  request(url)
-  .pipe(fs.createWriteStream(filepath))
-}
+var avatars = [];
+var login = [];
 
-var avatars = {};
+var owner = process.argv.slice(2, 3)[0];
+var repo = process.argv.slice(3, 4)[0]
 
-getRepoContributors("jquery", "jquery", function(err, result) {
+console.log(owner, repo)
+
+getRepoContributors(owner, repo, function(err, result) {
   console.log("Errors:", err);
   var result2 = JSON.parse(result)
-  for (var i in result2) {
-    avatars[i] = result2[i];
-  };
-});
 
-console.log(avatars)
+  result2.forEach(function(account) {
+    downloadImageByURL(account.avatar_url, './avatars/' + account.login + '.jpg')
+  })
+});
+// does not download unless avatars folder is already made @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+function downloadImageByURL(url, filepath) {
+  request.get(url)
+    .on('error', function(err) {
+      throw err;
+    })
+    .on('response', function(res) {
+      console.log("success. status:", res.statusMessage);
+    })
+    .on('end', function() {
+      console.log('end');
+    })
+    .pipe(fs.createWriteStream(filepath));
+
+};
