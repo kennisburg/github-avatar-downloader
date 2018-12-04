@@ -38,7 +38,7 @@ getRepoContributors(owner, repo, function(err, result) {
     downloadImageByURL(avatarURL, './avatars/' + filepath + '.jpg')
   })
 });
-
+// does not download unless avatars folder is already made @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 function downloadImageByURL(url, filepath) {
@@ -52,6 +52,7 @@ function downloadImageByURL(url, filepath) {
     .on('end', function() {
       console.log('end');
     })
+    // 'success. status: statusMessage' && 'end' repeat after downloading images @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     .pipe(fs.createWriteStream(filepath));
 
 };
