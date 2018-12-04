@@ -33,6 +33,25 @@ getRepoContributors(owner, repo, function(err, result) {
     downloadImageByURL(account.avatar_url, './avatars/' + account.login + '.jpg')
   })
 });
+// does not download unless avatars folder is already made @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+function downloadImageByURL(url, filepath) {
+  request.get(url)
+    .on('error', function(err) {
+      throw err;
+    })
+    .on('response', function(res) {
+      console.log("success. status:", res.statusMessage);
+    })
+    .on('end', function() {
+      console.log('end');
+    })
+    // 'success. status: statusMessage' && 'end' repeat after downloading images @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    .pipe(fs.createWriteStream(filepath));
+
+};
+
 
 // does not download unless avatars folder is already made @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
