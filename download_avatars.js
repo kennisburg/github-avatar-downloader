@@ -21,7 +21,12 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 var avatars = [];
 
-getRepoContributors("jquery", "jquery", function(err, result) {
+var owner = process.argv.slice(2, 3)[0];
+var repo = process.argv.slice(3, 4)[0]
+
+console.log(owner, repo)
+
+getRepoContributors(owner, repo, function(err, result) {
   console.log("Errors:", err);
   var result2 = JSON.parse(result)
   for (var i of result2) {
